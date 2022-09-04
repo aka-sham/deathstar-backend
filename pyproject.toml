@@ -1,24 +1,24 @@
 [project]
-name = "giskard-deathstart-backend"
-description = ""
-version = "1.0"
-authors = [
-    { name = "Sébastien Metzger", email = "sebastien.metzger@nomogi.org" },
-]
-dependencies = ["starlite>=1.16.2", "uvicorn>=0.18.3"]
-license = { text = "MIT" }
-requires-python = ">=3.10"
+    name = "giskard-deathstart-backend"
+    description = "Backend of Death Star developer test aka the Millennium Falcon onboard computer."
+    version = "1.0"
+    authors = [
+        { name = "Sébastien Metzger", email = "sebastien.metzger@nomogi.org" },
+    ]
+    dependencies = ["starlite>=1.16.2", "uvicorn>=0.18.3"]
+    license = { text = "MIT" }
+    requires-python = ">=3.10"
 
 [project.optional-dependencies]
 
 [build-system]
-build-backend = "pdm.pep517.api"
-requires = ["pdm-pep517>=1.0.0"]
+    build-backend = "pdm.pep517.api"
+    requires = ["pdm-pep517>=1.0.0"]
 
 [tool]
 [tool.pdm]
 [tool.pdm.dev-dependencies]
-dev = ["black>=22.8.0"]
+    dev = ["black>=22.8.0"]
 
 [tool.pdm.scripts]
-start_server = "uvicorn main:app --reload"
+    start_server = "uvicorn main:app --reload"
