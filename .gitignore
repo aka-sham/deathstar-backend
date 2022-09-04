@@ -162,6 +162,8 @@ __pypackages__/
 
 # Application
 millennium-falcon.json
+db/*.db
+db/*.sqlite
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
