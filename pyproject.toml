@@ -22,7 +22,10 @@
 [tool]
 [tool.pdm]
 [tool.pdm.dev-dependencies]
-    dev = ["black>=22.8.0"]
+    dev = [
+        "black>=22.8.0",
+        "mypy>=0.971",
+    ]
 
 [tool.pdm.scripts]
     start_server = "uvicorn app.main:app --reload"
