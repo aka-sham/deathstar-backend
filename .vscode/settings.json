@@ -5,7 +5,7 @@
     "python.analysis.extraPaths": [
         "${workspaceFolder}/.venv/lib"
     ],
-    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.typeCheckingMode": "basic",
     "python.formatting.provider": "black",
     "python.formatting.blackPath": "${workspaceFolder}/.venv/bin/black",
     "editor.formatOnSave": true

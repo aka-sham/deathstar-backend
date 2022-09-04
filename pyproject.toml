@@ -21,4 +21,4 @@
     dev = ["black>=22.8.0"]
 
 [tool.pdm.scripts]
-    start_server = "uvicorn main:app --reload"
+    start_server = "uvicorn app.main:app --reload"
