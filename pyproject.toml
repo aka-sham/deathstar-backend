@@ -9,6 +9,7 @@
         "starlite>=1.16.2",
         "uvicorn>=0.18.3",
         "piccolo[all]>=0.89.0",
+        "networkx>=2.8.6",
     ]
     license = { text = "MIT" }
     requires-python = ">=3.10"
