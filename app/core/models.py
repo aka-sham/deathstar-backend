@@ -11,7 +11,7 @@ class BountyHunter(BaseModel):
     day: int
 
 
-class Empire(BaseModel):
+class EmpireSettings(BaseModel):
     """
     Empire base model.
     """
@@ -20,3 +20,10 @@ class Empire(BaseModel):
     countdown: int
     # List of all locations where Bounty Hunter are scheduled to be present.
     bounty_hunters: list[BountyHunter]
+
+
+class MilleniumFalconState(BaseModel):
+    planet: str
+    day: int
+    fuel: int
+    capture_attempts: int

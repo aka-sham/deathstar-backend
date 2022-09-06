@@ -10,8 +10,8 @@ from starlite import RequestEncodingType
 from starlite.plugins.piccolo_orm import PiccoloORMPlugin
 
 from app.models import UniverseRoute
-from app.core.compute import print_shortest_path
-from app.core.models import Empire
+from app.core.models import EmpireSettings
+from app.core.compute import analyse_paths
 
 
 @get("/")
@@ -30,8 +30,10 @@ async def handle_file_upload(
     data: UploadFile = Body(media_type=RequestEncodingType.MULTI_PART),
 ) -> None:
     contents = await data.read()
-    empire = Empire.parse_raw(contents, content_type="application/json")
-    print(empire)
+    empire_settings = EmpireSettings.parse_raw(
+        contents, content_type="application/json"
+    )
+    proba = await analyse_paths(empire_settings)
 
 
 app = Starlite(
