@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import networkx as nx
-from typing import Iterator, Optional
 
-from app.models import UniverseRoute
 from app.settings import MilleniumFalconSettings
 from app.settings import MILLENIUM_FALCON_SETTINGS
+from app.core.models import UniverseRoute
 from app.core.models import EmpireSettings
 from app.core.models import MilleniumFalconState
 
@@ -89,12 +88,12 @@ async def analyse_paths(
 
     # Dictionary of distances keyed by edge
     basic_distances = nx.get_edge_attributes(universe_graph, "weight")
-    # Complete disctionnary
+    # Extra key to use dictionnary correctly
     extra_distances = {}
     for key, value in basic_distances.items():
         if len(key) == 2:
             extra_distances[(key[1], key[0])] = value
-
+    # Complete dictionnary of distances
     distances = basic_distances | extra_distances
 
     for shortest_path in shortest_paths:
@@ -129,7 +128,24 @@ def travel_trought_space(
     empire_settings: EmpireSettings,
     millenium_falcon_settings: MilleniumFalconSettings = MILLENIUM_FALCON_SETTINGS,
 ) -> float:
+    """
+    Recursive method to travel through the whole possibilities on a given path.
+    It will walkthrough a binary tree generated thanks to 2 possible
+    actions, travel or wait. Then when a leaf is reached it will return
+    the bounty hunter probability if this leaf is the destination, or 100% chance
+    to failed if the leaf represent a planet where countdown is finished.
 
+    Args:
+        state (MilleniumFalconState): Millenium Falcon current state.
+        path (list[str]): current path on which Millenium Falcon is travelling.
+        distances (dict): contains all distances between planets.
+        empire_settings (EmpireSettings): Empire settings received which described
+        the countdown and the future location of bounty hunters.
+        millenium_falcon_settings (MilleniumFalconSettings, optional): Millenium Falcon settings to determine which routes can be kept. Defaults to MILLENIUM_FALCON_SETTINGS.
+
+    Returns:
+        float: probability that bounty hunters will capture the Millenium Falcon.
+    """
     if state.planet == path[-1]:
         return bounty_hunter_probability(state.capture_attempts)
     elif state.day == empire_settings.countdown:
@@ -146,9 +162,7 @@ def travel_trought_space(
             travel_state.fuel -= distance
             travel_state.day += distance
             travel_state.capture_attempts = get_capture_attempts(
-                travel_state.planet,
-                travel_state.day,
-                travel_state.capture_attempts,
+                travel_state,
                 empire_settings,
             )
             travel_probability = travel_trought_space(
@@ -165,9 +179,7 @@ def travel_trought_space(
         wait_state.fuel = millenium_falcon_settings.autonomy
         wait_state.day += 1
         wait_state.capture_attempts = get_capture_attempts(
-            wait_state.planet,
-            wait_state.day,
-            wait_state.capture_attempts,
+            wait_state,
             empire_settings,
         )
         wait_probability = travel_trought_space(
@@ -182,11 +194,22 @@ def travel_trought_space(
 
 
 def get_capture_attempts(
-    planet: str, day: int, attempts: int, empire_settings: EmpireSettings
+    state: MilleniumFalconState, empire_settings: EmpireSettings
 ) -> int:
-    nb_attempts = attempts
+    """
+    Determines depending on the Millenium Falcon state
+    and bounty hunters planning if they will try to capture the Millenium Falcon.
+
+    Args:
+        state (MilleniumFalconState): Millenium Falcon current state.
+        empire_settings (EmpireSettings): Empire settings which contains the countdown and bounty hunters positions.
+
+    Returns:
+        int: update capture attempts number.
+    """
+    nb_attempts = state.capture_attempts
     for bounty_hunter in empire_settings.bounty_hunters:
-        if bounty_hunter.planet == planet and bounty_hunter.day == day:
+        if bounty_hunter.planet == state.planet and bounty_hunter.day == state.day:
             nb_attempts += 1
 
     return nb_attempts

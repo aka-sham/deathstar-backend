@@ -2,41 +2,68 @@
 # -*- coding: utf-8 -*-
 
 from starlite import Starlite
-from starlite import get
 from starlite import post
 from starlite import Body
 from starlite import UploadFile
 from starlite import RequestEncodingType
 from starlite.plugins.piccolo_orm import PiccoloORMPlugin
 
-from app.models import UniverseRoute
 from app.core.models import EmpireSettings
+from app.core.models import Mission
+from app.core.models import C3PORequest
+from app.core.models import R2D2Request
 from app.core.compute import analyse_paths
+from app.settings import MilleniumFalconSettings
 
 
-@get("/")
-async def health_check() -> str:
-    await print_shortest_path()
-    return "healthy"
+@post("/c3po")
+async def handle_c3po_request(
+    data: C3PORequest = Body(media_type=RequestEncodingType.MULTI_PART),
+) -> Mission:
+    """
+    Route dedicated to C3PO to return the probability of success to save Endor.
+
+    Args:
+        data (C3PORequest, optional): C3PO must upload an empire.json file which contains infos about countdown and bounty hunters locations. Defaults to Body(media_type=RequestEncodingType.MULTI_PART).
+    Returns:
+        Mission: Mission DTO wich contains the probability of success.
+    """
+    content = await data.empire.read()
+    empire_settings = EmpireSettings.parse_raw(content, content_type="application/json")
+    probability_to_be_captured = await analyse_paths(empire_settings)
+    return Mission(probability=100 - probability_to_be_captured)
 
 
-@get("/routes")
-async def retrieve_routes() -> list[UniverseRoute]:
-    return await UniverseRoute.select()
+@post("/r2d2")
+async def handle_r2d2_request(
+    data: R2D2Request = Body(media_type=RequestEncodingType.MULTI_PART),
+) -> Mission:
+    """
+    Route dedicated to R2D2 to return the probability of success to save Endor.
 
+    Args:
+        data (R2D2Request, optional): R2D2 must upload an millenium-falcon.json and an empire.json files. Defaults to Body(media_type=RequestEncodingType.MULTI_PART).
 
-@post("/file-upload")
-async def handle_file_upload(
-    data: UploadFile = Body(media_type=RequestEncodingType.MULTI_PART),
-) -> None:
-    contents = await data.read()
-    empire_settings = EmpireSettings.parse_raw(
-        contents, content_type="application/json"
+    Returns:
+        Mission: Mission DTO wich contains the probability of success.
+    """
+    millenium_falcon_content = await data.millenium_falcon.read()
+    millenium_falcon_settings = MilleniumFalconSettings.parse_raw(
+        millenium_falcon_content, content_type="application/json"
     )
-    proba = await analyse_paths(empire_settings)
+
+    empire_content = await data.empire.read()
+    empire_settings = EmpireSettings.parse_raw(
+        empire_content, content_type="application/json"
+    )
+
+    probability_to_be_captured = await analyse_paths(
+        empire_settings, millenium_falcon_settings
+    )
+    return Mission(probability=100 - probability_to_be_captured)
 
 
 app = Starlite(
-    route_handlers=[health_check, retrieve_routes, handle_file_upload],
+    route_handlers=[handle_c3po_request, handle_r2d2_request],
     plugins=[PiccoloORMPlugin()],
 )

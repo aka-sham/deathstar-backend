@@ -2,6 +2,23 @@
 # -*- coding: utf-8 -*-
 
 from pydantic import BaseModel
+from pydantic import BaseConfig
+
+from starlite import UploadFile
+
+from piccolo.columns.column_types import (
+    Integer,
+    Varchar,
+)
+from piccolo.table import Table
+
+from app.db import DB
+
+
+class UniverseRoute(Table, tablename="routes", db=DB):
+    origin = Varchar(primary_key=True)
+    destination = Varchar(primary_key=True)
+    travel_time = Integer()
 
 
 class BountyHunter(BaseModel):
@@ -27,3 +44,22 @@ class MilleniumFalconState(BaseModel):
     day: int
     fuel: int
     capture_attempts: int
+
+
+class C3PORequest(BaseModel):
+    empire: UploadFile
+
+    class Config(BaseConfig):
+        arbitrary_types_allowed = True
+
+
+class R2D2Request(BaseModel):
+    millenium_falcon: UploadFile
+    empire: UploadFile
+
+    class Config(BaseConfig):
+        arbitrary_types_allowed = True
+
+
+class Mission(BaseModel):
+    probability: float
