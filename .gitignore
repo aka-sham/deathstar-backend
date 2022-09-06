@@ -162,7 +162,6 @@ __pypackages__/
 
 # Application
 millennium-falcon.json
-empire.json
 db/*.db
 db/*.sqlite
 
