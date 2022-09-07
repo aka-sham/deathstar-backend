@@ -55,7 +55,7 @@ def bounty_hunter_probability(attempts: int) -> float:
         for capture_attempt in range(1, attempts):
             probability += (9**capture_attempt) / (10 ** (capture_attempt + 1))
 
-    return probability
+    return probability * 100.0
 
 
 async def analyse_paths(
