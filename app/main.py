@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from starlite import CORSConfig
 from starlite import Starlite
 from starlite import post
 from starlite import Body
-from starlite import UploadFile
 from starlite import RequestEncodingType
 from starlite.plugins.piccolo_orm import PiccoloORMPlugin
 
@@ -14,6 +14,9 @@ from app.core.models import C3PORequest
 from app.core.models import R2D2Request
 from app.core.compute import analyse_paths
 from app.settings import MilleniumFalconSettings
+
+# Allows every origins
+CORS_CONFIG = CORSConfig(allow_origins=["*"])
 
 
 @post("/c3po")
@@ -66,4 +69,5 @@ async def handle_r2d2_request(
 app = Starlite(
     route_handlers=[handle_c3po_request, handle_r2d2_request],
     plugins=[PiccoloORMPlugin()],
+    cors_config=CORS_CONFIG,
 )
