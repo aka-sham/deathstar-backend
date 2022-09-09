@@ -1,7 +1,7 @@
 [project]
     name = "falcon"
     description = "Backend of Death Star developer test aka the Millennium Falcon onboard computer."
-    version = "1.0"
+    version = "1.0.0"
     authors = [
         { name = "Sébastien Metzger", email = "sebastien.metzger@nomogi.org" },
     ]
