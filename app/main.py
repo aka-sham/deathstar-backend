@@ -9,6 +9,7 @@
 # E-Mail           : sebastien.metzger@nomogi.org
 ##
 
+import uvicorn
 import logging
 
 from starlite import CORSConfig
@@ -18,8 +19,9 @@ from starlite import Body
 from starlite import RequestEncodingType
 from starlite.plugins.piccolo_orm import PiccoloORMPlugin
 
-from app.settings import MilleniumFalconSettings
 from app.util import init_logging
+from app.settings import APP_SETTINGS
+from app.settings import MilleniumFalconSettings
 from app.core.models import EmpireSettings
 from app.core.models import Mission
 from app.core.models import C3PORequest
@@ -28,9 +30,10 @@ from app.core.compute import analyse_paths
 
 # Logger
 LOG = logging.getLogger("falcon")
+LOG.info(f"Application settings: {APP_SETTINGS}")
 
 # Allows every origins
-CORS_CONFIG = CORSConfig(allow_origins=["*"])
+CORS_CONFIG = CORSConfig(allow_origins=[APP_SETTINGS.cors_allow_origins])
 
 
 @post("/c3po")
@@ -90,3 +93,12 @@ app = Starlite(
     on_startup=[init_logging],
     cors_config=CORS_CONFIG,
 )
+
+
+if __name__ == "__main__":
+    uvicorn.run(
+        "app.main:app",
+        host=APP_SETTINGS.app_host,
+        port=APP_SETTINGS.app_port,
+        reload=APP_SETTINGS.app_reload,
+    )

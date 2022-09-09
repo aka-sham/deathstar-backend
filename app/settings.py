@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from pydantic import BaseSettings
+from pydantic.env_settings import SettingsSourceCallable
 
 
 def millenium_falcon_json_settings(settings: BaseSettings) -> dict[str, Any]:
@@ -58,7 +59,36 @@ class MilleniumFalconSettings(BaseSettings):
     routes_db: str
 
 
-# Default app settings
+class AppSettings(BaseSettings):
+    """Settings class to setup application."""
+
+    app_host: str
+    app_port: int
+    app_reload: bool
+    cors_allow_origins: str
+
+    class Config:
+        """Overrides Config class to read .env file correctly."""
+
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
+        @classmethod
+        def customise_sources(
+            cls,
+            init_settings: SettingsSourceCallable,
+            env_settings: SettingsSourceCallable,
+            file_secret_settings: SettingsSourceCallable,
+        ) -> tuple[SettingsSourceCallable, ...]:
+            return env_settings, init_settings, file_secret_settings
+
+
+# Default Millenium Falcon settings
 MILLENIUM_FALCON_SETTINGS = MilleniumFalconSettings(
     autonomy=6, departure="Tatooine", arrival="Endor", routes_db="universe.db"
+)
+
+# Default Millenium Falcon settings
+APP_SETTINGS = AppSettings(
+    app_host="127.0.0.1", app_port=8000, app_reload=False, cors_allow_origins="*"
 )
