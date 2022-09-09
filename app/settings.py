@@ -92,3 +92,5 @@ MILLENIUM_FALCON_SETTINGS = MilleniumFalconSettings(
 APP_SETTINGS = AppSettings(
     app_host="127.0.0.1", app_port=8000, app_reload=False, cors_allow_origins="*"
 )
+
+# EOF

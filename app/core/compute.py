@@ -226,3 +226,6 @@ def get_capture_attempts(
             nb_attempts += 1
 
     return nb_attempts
+
+
+# EOF

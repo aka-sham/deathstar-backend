@@ -71,3 +71,6 @@ class R2D2Request(BaseModel):
 
 class Mission(BaseModel):
     probability: float
+
+
+# EOF

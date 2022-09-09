@@ -14,3 +14,5 @@ from app.settings import MILLENIUM_FALCON_SETTINGS
 
 # Create DB engine for future connection
 DB = SQLiteEngine(path=MILLENIUM_FALCON_SETTINGS.routes_db)
+
+# EOF
