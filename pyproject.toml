@@ -1,5 +1,5 @@
 [project]
-    name = "giskard-deathstart-backend"
+    name = "falcon"
     description = "Backend of Death Star developer test aka the Millennium Falcon onboard computer."
     version = "1.0"
     authors = [

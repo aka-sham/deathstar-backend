@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+###
+# Project          : deathstar-backend
+# FileName         : models.py
+# -----------------------------------------------------------------------------
+# Author           : Sébastien Metzger
+# E-Mail           : sebastien.metzger@nomogi.org
+##
+
 from pydantic import BaseModel
 from pydantic import BaseConfig
 

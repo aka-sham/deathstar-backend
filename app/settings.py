@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+###
+# Project          : deathstar-backend
+# FileName         : settings.py
+# -----------------------------------------------------------------------------
+# Author           : Sébastien Metzger
+# E-Mail           : sebastien.metzger@nomogi.org
+##
+
 import json
 from pathlib import Path
 from typing import Any

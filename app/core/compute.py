@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+###
+# Project          : deathstar-backend
+# FileName         : compute.py
+# -----------------------------------------------------------------------------
+# Author           : Sébastien Metzger
+# E-Mail           : sebastien.metzger@nomogi.org
+##
+
+import logging
 import networkx as nx
 
 from app.settings import MilleniumFalconSettings
@@ -8,6 +17,9 @@ from app.settings import MILLENIUM_FALCON_SETTINGS
 from app.core.models import UniverseRoute
 from app.core.models import EmpireSettings
 from app.core.models import MilleniumFalconState
+
+# Logger
+LOG = logging.getLogger("falcon.core")
 
 
 async def generate_graph_from_routes(
@@ -23,6 +35,7 @@ async def generate_graph_from_routes(
     Returns:
         nx.Graph: NetworkX Graph which represents all Universe
     """
+    LOG.debug("Generates a new graph from routes")
     graph = nx.Graph()
     routes: list[UniverseRoute] = await UniverseRoute.objects()
 
